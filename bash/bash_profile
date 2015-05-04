@@ -1,0 +1,3 @@
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
+
+export PATH=/opt/local/bin:/opt/local/sbin:/Applications/MAMP/bin/php5.3/bin:/Applications/MAMP/Library/bin:/usr/local/share/npm/bin:/Users/jbeaird/node_modules/:$PATH
