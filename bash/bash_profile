@@ -1,4 +1,4 @@
-#  ---------------------------------------------------------------------------
+suble#  ---------------------------------------------------------------------------
 #
 #  Description:  This file holds all my BASH configurations and aliases
 #
@@ -7,6 +7,7 @@
 #  2.   Make Terminal Better (remapping defaults and adding functionality)
 #  3.   File and Folder Management
 #  4.   Searching
+#  5.   Git Optimizations
 #
 #  ---------------------------------------------------------------------------
  
@@ -136,3 +137,61 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name end
 #   -----------------------------------------------------------
     spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
  
+
+
+#  -----------------------------------
+#  5.  GIT OPTIMIZATIONS
+#  -----------------------------------
+ 
+ 
+# Git command completion (http://code-worrier.com/blog/autocomplete-git/)
+ 
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+ 
+# Git branch identifier and status indicator (inspired by https://gist.github.com/stevenosloan/9fad40b652ae0c4b42db)
+ 
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+}
+ 
+function parse_git_status {
+  # check if we're in a git repo
+  is_git=`git status 2> /dev/null`
+  if [ -z "$is_git" ] ; then
+    return 1
+  fi
+ 
+  # check if there are changes
+  status=`git status 2> /dev/null | grep "nothing to commit"`
+  dirty_marker="Δ"
+ 
+  if [ "$status" != "nothing to commit, working directory clean" ] ; then
+    echo " $dirty_marker"
+  fi
+}
+ 
+function format_prompt_for_git {
+  local  GREEN="\[\e[32m\]"
+  local  EMK="\[\e[30m\]"
+  local  TEAL="\[\e[36m\]"
+  local  DEFAULT="\[\e[0m\]"
+ 
+  export PS1="\W$GREEN\$(parse_git_branch)$TEAL\$(parse_git_status) $DEFAULT"
+}
+ 
+format_prompt_for_git
+ 
+ 
+# Git aliases
+ 
+alias cdmc='cd ~/Sites/mailchimp'
+alias cdgit='cd ~/Sites/'
+ 
+alias add='git add .'
+alias status='git status'
+alias st='git status'
+alias push='git push'
+ 
+
